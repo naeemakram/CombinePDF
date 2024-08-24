@@ -8,6 +8,10 @@
 
 
 
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+
 string[] filesToMerge = Directory.GetFiles(@"C:\Users\Naeem Malik\source\repos\CombinePDF\bin\Debug\net6.0\pdffiles");
 ////Specify the output folder
 //string outputFolder = @"C:\Users\Naeem Malik\source\repos\CombinePDF\bin\Debug\net6.0\pdffiles\merged";
@@ -41,4 +45,13 @@ string[] filesToMerge = Directory.GetFiles(@"C:\Users\Naeem Malik\source\repos\C
 //    }
 //}
 
+if (File.Exists("testFile.pdf")){
+    File.Delete("testFile.pdf");
+}
+
+var writer = new PdfWriter("testFile.pdf");
+var pdf = new PdfDocument(writer);
+var document = new Document(pdf);
+document.Add(new Paragraph("Hello World!"));
+document.Close();
 
