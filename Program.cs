@@ -8,42 +8,13 @@
 
 
 
+using iText.IO.Font;
+using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 
 string[] filesToMerge = Directory.GetFiles(@"C:\Users\Naeem Malik\source\repos\CombinePDF\bin\Debug\net6.0\pdffiles");
-////Specify the output folder
-//string outputFolder = @"C:\Users\Naeem Malik\source\repos\CombinePDF\bin\Debug\net6.0\pdffiles\merged";
-////Create a new document
-//PdfDocumentBase? newPdf = null;
-
-//newPdf = PdfDocument.MergeFiles(filesToMerge);
-////Save the document to a different PDF file
-//newPdf?.Save($"{outputFolder}\\Output-merged.pdf", FileFormat.PDF);
-
-
-//using (PdfDocument outPDF = new PdfDocument()) {
-//    foreach (string file in filesToMerge)
-//    {
-//        using(var PDFFile = File.Open(file, FileMode.Open)){
-
-//            PdfDocument current = PdfReader.Open(PDFFile, PdfDocumentOpenMode.Import);            
-//            CopyPages(current, outPDF);
-
-//        }
-//    }
-//    outPDF.Save(".\\merged.pdf");
-//}
-
-
-//void CopyPages(PdfDocument from, PdfDocument to)
-//{
-//    for (int i = 0; i < from.PageCount; i++)
-//    {
-//        to.AddPage(from.Pages[i]);
-//    }
-//}
 
 if (File.Exists("testFile.pdf")){
     File.Delete("testFile.pdf");
@@ -52,6 +23,22 @@ if (File.Exists("testFile.pdf")){
 var writer = new PdfWriter("testFile.pdf");
 var pdf = new PdfDocument(writer);
 var document = new Document(pdf);
-document.Add(new Paragraph("Hello World!"));
+// Create a PdfFont
+var font = PdfFontFactory.CreateFont();
+// Add a Paragraph
+document.Add(new Paragraph("iText is:").SetFont(font));
+// Create a List
+List list = new List()
+    .SetSymbolIndent(12)
+    .SetListSymbol("u2022")
+    .SetFont(font);
+// Add ListItem objects
+list.Add(new ListItem("Never gonna give you up"))
+    .Add(new ListItem("Never gonna let you down"))
+    .Add(new ListItem("Never gonna run around and desert you"))
+    .Add(new ListItem("Never gonna make you cry"))
+    .Add(new ListItem("Never gonna say goodbye"))
+    .Add(new ListItem("Never gonna tell a lie and hurt you"));
+// Add the list
+document.Add(list);
 document.Close();
-
