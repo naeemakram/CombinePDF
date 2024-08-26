@@ -3,8 +3,8 @@
 using iText.Kernel.Pdf;
 using iText.Layout;
 
-string[] filesToMerge = Directory.GetFiles(@".\SamplePDFFiles", "*.pdf");
-
+string[] filesToMerge = Directory.GetFiles(@"", "*.pdf");
+string patternToOmit = "";
 var writer = new PdfWriter(@".\Output\mergedFile.pdf");
 var pdf = new PdfDocument(writer);
 
@@ -18,9 +18,16 @@ try
 
             Console.WriteLine($"Processing: {file}");
 
+            if (!patternToOmit.Equals(string.Empty) && file.Contains(patternToOmit))
+            {
+                Console.WriteLine("Skip file...");
+                break;
+            }
+
             try
             {
-                using (PdfDocument origPdf = new PdfDocument(new PdfReader(File.Open(file, FileMode.Open))))
+                //MemoryStream stream = new MemoryStream(File.ReadAllBytes(file));                
+                using (PdfDocument origPdf = new PdfDocument(new PdfReader(file)))
                 {
                     var totalPages = origPdf.GetNumberOfPages();
 
