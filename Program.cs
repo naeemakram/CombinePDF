@@ -5,29 +5,40 @@ using iText.Layout;
 
 string[] filesToMerge = Directory.GetFiles(@".\SamplePDFFiles", "*.pdf");
 
-
 var writer = new PdfWriter(@".\Output\mergedFile.pdf");
 var pdf = new PdfDocument(writer);
 
-using (var destDocument = new Document(pdf))
+try
 {
-
-    foreach (var file in filesToMerge)
+    using (var destDocument = new Document(pdf))
     {
- 
-        Console.WriteLine($"Processing: {file}");
 
-        using (PdfDocument origPdf = new PdfDocument(new PdfReader(file)))
+        foreach (var file in filesToMerge)
         {
-            var totalPages = origPdf.GetNumberOfPages();
 
-            for (var i = 0; i < totalPages; i++)
+            Console.WriteLine($"Processing: {file}");
+
+            try
             {
-                origPdf.CopyPagesTo(1, totalPages, pdf);
+                using (PdfDocument origPdf = new PdfDocument(new PdfReader(File.Open(file, FileMode.Open))))
+                {
+                    var totalPages = origPdf.GetNumberOfPages();
+
+                    for (var i = 0; i < totalPages; i++)
+                    {
+                        origPdf.CopyPagesTo(1, totalPages, pdf);
+                    }
+                }
             }
+            catch (Exception excp){
+                Console.WriteLine(excp.ToString());
+            }
+
         }
 
+        destDocument.Close();
     }
-
-    destDocument.Close();
+}catch(Exception excp)
+{
+    Console.WriteLine(excp.ToString());
 }
